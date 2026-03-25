@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sala Afetos — Agenda</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sage:        #6b9a72;
+  --sage-light:  #eaf2eb;
+  --sage-mid:    #a8cead;
+  --sage-dark:   #3d6642;
+  --lav:         #8f7cbf;
+  --lav-light:   #eeebf8;
+  --lav-mid:     #bfb3e0;
+  --lav-dark:    #4a3a8c;
+  --warm:        #f7f3ec;
+  --warm-dark:   #e8e0d2;
+  --warm-darker: #d4c9b8;
+  --ink:         #28221c;
+  --ink-mid:     #5a5048;
+  --ink-light:   #9a8e84;
+  --cream:       #fbf8f3;
+  --white:       #ffffff;
+  --gold:        #c89e3a;
+  --gold-light:  #fdf5e0;
+  --gold-mid:    #e8c97a;
+  --radius:      12px;
+  --slot-h:      46px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;font-size:14px;}
+
+/* ── NAV ── */
+nav{
+  position:sticky;top:0;z-index:300;
+  background:rgba(251,248,243,0.95);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--warm-dark);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 32px;height:64px;
+}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.logo-mark{
+  width:32px;height:32px;border-radius:50%;
+  background:var(--sage);
+  display:flex;align-items:center;justify-content:center;
+}
+.logo-mark svg{width:16px;height:16px;}
+.logo-name{font-family:'Playfair Display',serif;font-size:20px;color:var(--ink);letter-spacing:-.2px;}
+.nav-links{display:flex;gap:6px;align-items:center;}
+.nav-link{
+  padding:6px 16px;border-radius:20px;
+  font-size:13px;font-weight:400;color:var(--ink-mid);
+  cursor:pointer;transition:all .15s;border:none;background:none;
+  font-family:'Jost',sans-serif;
+}
+.nav-link:hover{background:var(--warm-dark);color:var(--ink);}
+.nav-link.active{background:var(--ink);color:var(--white);}
+.nav-insta{
+  display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-mid);
+  text-decoration:none;background:var(--warm);border:1px solid var(--warm-dark);
+  border-radius:20px;padding:6px 14px;transition:background .15s;margin-left:8px;
+}
+.nav-insta:hover{background:var(--warm-dark);}
+.insta-icon{width:16px;height:16px;background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);border-radius:4px;flex-shrink:0;}
+
+/* ── SECTIONS ── */
+.section{display:none;}
+.section.visible{display:block;}
+
+/* ── HERO / APRESENTAÇÃO ── */
+.hero{
+  padding:60px 32px 0;
+  max-width:960px;margin:0 auto;
+}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--sage-light);border:1px solid var(--sage-mid);
+  color:var(--sage-dark);font-size:11px;font-weight:500;letter-spacing:.06em;
+  padding:4px 14px;border-radius:20px;margin-bottom:20px;text-transform:uppercase;
+}
+.hero h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(32px,5vw,52px);
+  line-height:1.15;color:var(--ink);
+  max-width:600px;margin-bottom:16px;
+}
+.hero h1 em{font-style:italic;color:var(--sage);}
+.hero-sub{font-size:16px;color:var(--ink-light);font-weight:300;max-width:480px;line-height:1.7;margin-bottom:40px;}
+.hero-cta{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--ink);color:var(--white);
+  padding:14px 28px;border-radius:30px;
+  font-size:14px;font-weight:500;cursor:pointer;
+  border:none;font-family:'Jost',sans-serif;
+  transition:background .15s;text-decoration:none;
+}
+.hero-cta:hover{background:var(--ink-mid);}
+
+/* ── SALAS CARDS ── */
+.salas-section{padding:60px 32px;max-width:960px;margin:0 auto;}
+.section-label{
+  font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-light);margin-bottom:8px;
+}
+.section-title{
+  font-family:'Playfair Display',serif;font-size:28px;color:var(--ink);
+  margin-bottom:32px;
+}
+.salas-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.sala-card{
+  border-radius:var(--radius);overflow:hidden;
+  border:1px solid var(--warm-dark);
+  background:var(--white);
+  transition:transform .2s,box-shadow .2s;
+}
+.sala-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(40,34,28,.08);}
+.sala-img{
+  width:100%;height:220px;object-fit:cover;display:block;
+  background:var(--warm-dark);position:relative;overflow:hidden;
+}
+/* Placeholder art para as fotos */
+.sala-img-placeholder{
+  width:100%;height:220px;display:flex;align-items:center;justify-content:center;
+  font-size:13px;color:var(--ink-light);flex-direction:column;gap:8px;
+  position:relative;overflow:hidden;
+}
+.sala-img-placeholder svg{opacity:.3;}
+.sala-adultos-bg{background:linear-gradient(135deg,#d4e8d6 0%,#eaf2eb 60%,#f0ebe0 100%);}
+.sala-criancas-bg{background:linear-gradient(135deg,#e0daf2 0%,#eeebf8 60%,#f0ebe0 100%);}
+.placeholder-label{font-size:11px;color:var(--ink-light);margin-top:4px;}
+.sala-badge{
+  position:absolute;top:14px;left:14px;
+  font-size:11px;font-weight:500;padding:4px 12px;border-radius:20px;
+}
+.badge-adultos{background:var(--sage);color:var(--white);}
+.badge-criancas{background:var(--lav);color:var(--white);}
+.sala-body{padding:20px;}
+.sala-name{font-family:'Playfair Display',serif;font-size:18px;color:var(--ink);margin-bottom:6px;}
+.sala-desc{font-size:13px;color:var(--ink-light);line-height:1.6;margin-bottom:16px;}
+.sala-features{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px;}
+.feature-pill{
+  font-size:11px;background:var(--warm);border:1px solid var(--warm-dark);
+  color:var(--ink-mid);padding:3px 10px;border-radius:20px;
+}
+.sala-precos{border-top:1px solid var(--warm-dark);padding-top:14px;}
+.preco-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;}
+.preco-label{font-size:13px;color:var(--ink-mid);}
+.preco-val{font-size:15px;font-weight:500;color:var(--ink);}
+.preco-val span{font-size:11px;font-weight:400;color:var(--ink-light);}
+
+/* ── FUNCIONAMENTO ── */
+.func-section{
+  background:var(--ink);color:var(--white);
+  padding:50px 32px;
+}
+.func-inner{max-width:960px;margin:0 auto;}
+.func-section .section-label{color:rgba(255,255,255,.4);}
+.func-section .section-title{color:var(--white);}
+.func-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:0;}
+.func-card{
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  border-radius:var(--radius);padding:20px;
+}
+.func-icon{font-size:22px;margin-bottom:10px;}
+.func-card-title{font-size:14px;font-weight:500;color:var(--white);margin-bottom:4px;}
+.func-card-desc{font-size:13px;color:rgba(255,255,255,.5);line-height:1.6;}
+
+/* ── AGENDA ── */
+.agenda-section{padding:48px 32px;max-width:960px;margin:0 auto;}
+
+.sala-tabs{display:flex;gap:10px;margin-bottom:0;}
+.sala-tab{
+  display:flex;align-items:center;gap:8px;
+  padding:12px 20px;border-radius:10px 10px 0 0;
+  cursor:pointer;border:1px solid transparent;border-bottom:none;
+  transition:all .15s;background:var(--warm-dark);color:var(--ink-light);
+  font-size:14px;font-family:'Jost',sans-serif;font-weight:400;
+  position:relative;bottom:-1px;
+}
+.sala-tab.active{background:var(--white);color:var(--ink);font-weight:500;border-color:var(--warm-dark);}
+.sala-tab-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.dot-a{background:var(--sage);}
+.dot-c{background:var(--lav);}
+
+.agenda-main{
+  background:var(--white);border:1px solid var(--warm-dark);
+  border-radius:0 var(--radius) var(--radius) var(--radius);overflow:hidden;
+}
+.toolbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 24px;border-bottom:1px solid var(--warm-dark);flex-wrap:wrap;gap:12px;
+}
+.week-nav{display:flex;align-items:center;gap:12px;}
+.nav-btn{
+  width:32px;height:32px;border-radius:50%;border:1px solid var(--warm-dark);
+  background:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:16px;color:var(--ink-mid);transition:all .15s;user-select:none;
+}
+.nav-btn:hover{background:var(--warm);border-color:var(--ink-light);}
+.week-label{font-size:15px;font-weight:500;color:var(--ink);min-width:200px;text-align:center;}
+.view-btns{display:flex;gap:6px;}
+.view-btn{
+  padding:5px 14px;border-radius:20px;border:1px solid var(--warm-dark);
+  background:var(--white);font-size:12px;font-weight:500;cursor:pointer;
+  color:var(--ink-mid);transition:all .15s;font-family:'Jost',sans-serif;
+}
+.view-btn.on-hora{background:var(--sage-light);color:var(--sage-dark);border-color:var(--sage-mid);}
+.view-btn.on-periodo{background:var(--gold-light);color:#7a5a0e;border-color:var(--gold-mid);}
+
+.legend{
+  display:flex;gap:16px;padding:10px 24px;
+  border-bottom:1px solid var(--warm-dark);flex-wrap:wrap;
+}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-light);}
+.legend-box{width:14px;height:14px;border-radius:3px;}
+
+.grid-wrap{overflow-x:auto;padding-bottom:8px;}
+.sched{
+  min-width:580px;
+  display:grid;
+  grid-template-columns:52px repeat(6,1fr);
+  border-top:1px solid var(--warm-dark);
+}
+.col-hdr{
+  padding:10px 4px;text-align:center;
+  font-size:11px;font-weight:500;color:var(--ink-light);
+  border-bottom:1px solid var(--warm-dark);
+  background:var(--white);
+}
+.col-hdr .dn{font-size:17px;font-weight:500;color:var(--ink);display:block;margin-top:2px;}
+.col-hdr.today .dn{
+  background:var(--ink);color:var(--white);
+  width:28px;height:28px;border-radius:50%;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:13px;
+}
+.col-hdr.sat{color:var(--lav);}
+.col-hdr.sat .dn{color:var(--lav);}
+.tcol{
+  font-size:10px;color:var(--ink-light);text-align:right;
+  padding:0 8px 0 0;height:var(--slot-h);
+  display:flex;align-items:center;justify-content:flex-end;
+  border-right:1px solid var(--warm-dark);
+}
+.slot{
+  height:var(--slot-h);border-bottom:1px solid var(--warm-dark);border-right:1px solid var(--warm-dark);
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:500;cursor:pointer;transition:filter .12s;
+  position:relative;overflow:hidden;
+}
+.slot:hover{filter:brightness(.93);}
+.s-free{background:var(--sage-light);color:var(--sage-dark);}
+.s-free-p{background:var(--gold-light);color:#7a5a0e;}
+.s-busy{background:var(--warm);color:var(--ink-light);cursor:default;font-size:10px;}
+.s-busy:hover{filter:none;}
+.s-closed{background:#f0ece4;cursor:default;}
+.s-closed:hover{filter:none;}
+.s-closed::after{
+  content:'';position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%) rotate(-45deg);
+  width:1px;height:55%;background:var(--warm-darker);opacity:.6;
+}
+.pt{border-radius:6px 6px 0 0;border-bottom:none!important;height:calc(var(--slot-h) + 1px);}
+.pm{border-top:none;border-bottom:none!important;height:calc(var(--slot-h) + 1px);}
+.pb{border-top:none;border-radius:0 0 6px 6px;}
+
+/* ── MODAL RESERVA ── */
+.overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(40,34,28,.5);z-index:400;
+  align-items:flex-end;justify-content:center;
+}
+.overlay.open{display:flex;}
+.modal{
+  background:var(--white);border-radius:20px 20px 0 0;
+  padding:10px 24px 36px;width:100%;max-width:460px;
+  animation:up .25s ease;position:relative;
+}
+@keyframes up{from{transform:translateY(40px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.modal-handle{width:36px;height:4px;background:var(--warm-dark);border-radius:2px;margin:10px auto 22px;}
+.modal-close{
+  position:absolute;top:18px;right:18px;width:30px;height:30px;
+  border-radius:50%;border:1px solid var(--warm-dark);background:var(--white);
+  font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  color:var(--ink-light);
+}
+.modal-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:12px;font-weight:500;padding:4px 12px;border-radius:20px;margin-bottom:12px;
+}
+.modal-title{font-family:'Playfair Display',serif;font-size:22px;color:var(--ink);margin-bottom:4px;line-height:1.3;}
+.modal-sub{font-size:13px;color:var(--ink-light);margin-bottom:20px;}
+.modelo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+.modelo-card{
+  border:1.5px solid var(--warm-dark);border-radius:var(--radius);
+  padding:14px;cursor:pointer;transition:all .15s;
+}
+.modelo-card:hover{border-color:var(--ink-light);}
+.modelo-card.sel-hora{border-color:var(--sage);background:var(--sage-light);}
+.modelo-card.sel-per{border-color:var(--gold-mid);background:var(--gold-light);}
+.modelo-title{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:3px;}
+.modelo-desc{font-size:11px;color:var(--ink-light);line-height:1.5;}
+.wpp-btn{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;padding:16px;background:#25d366;color:white;
+  border:none;border-radius:var(--radius);font-size:15px;font-weight:500;
+  cursor:pointer;font-family:'Jost',sans-serif;transition:background .15s;
+  text-decoration:none;
+}
+.wpp-btn:hover{background:#1ebe59;}
+
+/* ── ADMIN ── */
+.admin-section{padding:48px 32px;max-width:960px;margin:0 auto;}
+.admin-login{
+  max-width:380px;margin:0 auto;
+  background:var(--white);border:1px solid var(--warm-dark);
+  border-radius:var(--radius);padding:32px;
+}
+.admin-login h2{font-family:'Playfair Display',serif;font-size:22px;color:var(--ink);margin-bottom:6px;}
+.admin-login p{font-size:13px;color:var(--ink-light);margin-bottom:24px;}
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:12px;font-weight:500;color:var(--ink-mid);margin-bottom:6px;}
+.field input{
+  width:100%;padding:10px 14px;border:1px solid var(--warm-dark);
+  border-radius:8px;font-size:14px;font-family:'Jost',sans-serif;
+  background:var(--white);color:var(--ink);outline:none;transition:border .15s;
+}
+.field input:focus{border-color:var(--sage);}
+.btn-primary{
+  width:100%;padding:12px;background:var(--ink);color:var(--white);
+  border:none;border-radius:8px;font-size:14px;font-weight:500;
+  cursor:pointer;font-family:'Jost',sans-serif;transition:background .15s;margin-top:4px;
+}
+.btn-primary:hover{background:var(--ink-mid);}
+.err-msg{font-size:12px;color:#c0392b;margin-top:8px;display:none;}
+
+.admin-panel{display:none;}
+.admin-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:24px;flex-wrap:wrap;gap:12px;
+}
+.admin-header h2{font-family:'Playfair Display',serif;font-size:22px;color:var(--ink);}
+.btn-logout{
+  padding:7px 18px;border:1px solid var(--warm-dark);border-radius:20px;
+  background:var(--white);font-size:12px;color:var(--ink-mid);cursor:pointer;
+  font-family:'Jost',sans-serif;transition:background .15s;
+}
+.btn-logout:hover{background:var(--warm-dark);}
+
+.admin-tabs{display:flex;gap:10px;margin-bottom:20px;}
+.admin-tab{
+  padding:8px 18px;border-radius:20px;border:1px solid var(--warm-dark);
+  background:var(--white);font-size:13px;color:var(--ink-mid);cursor:pointer;
+  font-family:'Jost',sans-serif;transition:all .15s;
+}
+.admin-tab.active{background:var(--ink);color:var(--white);border-color:var(--ink);}
+
+.admin-grid-wrap{
+  background:var(--white);border:1px solid var(--warm-dark);
+  border-radius:var(--radius);overflow:hidden;
+}
+.admin-toolbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 20px;border-bottom:1px solid var(--warm-dark);flex-wrap:wrap;gap:10px;
+}
+.admin-week-nav{display:flex;align-items:center;gap:10px;}
+.admin-week-label{font-size:14px;font-weight:500;color:var(--ink);min-width:190px;text-align:center;}
+.admin-hint{font-size:12px;color:var(--ink-light);}
+.admin-sched-wrap{overflow-x:auto;}
+.admin-sched{
+  min-width:560px;
+  display:grid;
+  grid-template-columns:52px repeat(6,1fr);
+  border-top:1px solid var(--warm-dark);
+}
+.a-slot{
+  height:40px;border-bottom:1px solid var(--warm-dark);border-right:1px solid var(--warm-dark);
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:500;cursor:pointer;transition:all .12s;
+  user-select:none;
+}
+.a-free{background:var(--sage-light);color:var(--sage-dark);}
+.a-free:hover{background:var(--sage-mid);color:var(--white);}
+.a-busy{background:#fdecea;color:#a93226;}
+.a-busy:hover{background:#f9d4d0;color:#7b2420;}
+.a-closed{background:#f0ece4;cursor:default;color:transparent;}
+.save-bar{
+  background:var(--ink);color:var(--white);
+  padding:14px 20px;display:flex;align-items:center;justify-content:space-between;
+  gap:12px;flex-wrap:wrap;
+}
+.save-bar p{font-size:13px;opacity:.7;}
+.btn-save{
+  padding:9px 22px;background:var(--sage);color:var(--white);
+  border:none;border-radius:8px;font-size:13px;font-weight:500;
+  cursor:pointer;font-family:'Jost',sans-serif;transition:background .15s;
+}
+.btn-save:hover{background:var(--sage-dark);}
+.btn-clear{
+  padding:9px 18px;background:transparent;color:rgba(255,255,255,.6);
+  border:1px solid rgba(255,255,255,.2);border-radius:8px;font-size:13px;
+  cursor:pointer;font-family:'Jost',sans-serif;transition:all .15s;
+}
+.btn-clear:hover{background:rgba(255,255,255,.1);}
+
+/* ── FOOTER ── */
+footer{
+  text-align:center;padding:24px 32px;
+  font-size:12px;color:var(--ink-light);
+  border-top:1px solid var(--warm-dark);margin-top:0;
+}
+footer a{color:var(--sage);text-decoration:none;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:640px){
+  nav{padding:0 16px;}
+  .nav-links .nav-link{padding:6px 10px;font-size:12px;}
+  .hero,.salas-section,.agenda-section,.admin-section{padding-left:16px;padding-right:16px;}
+  .func-section{padding:40px 16px;}
+  .salas-grid{grid-template-columns:1fr;}
+  .func-grid{grid-template-columns:1fr;}
+  .sala-tab{padding:10px 14px;font-size:13px;}
+  .modelo-grid{grid-template-columns:1fr;}
+  footer{padding:20px 16px;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="#" onclick="showSection('home')">
+    <div class="logo-mark">
+      <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8 2C5.8 2 4 3.8 4 6c0 1.5.8 2.8 2 3.5V12h4V9.5c1.2-.7 2-2 2-3.5 0-2.2-1.8-4-4-4z" fill="white" opacity=".9"/>
+        <rect x="6" y="12" width="4" height="1.5" rx=".75" fill="white" opacity=".7"/>
+        <rect x="6.5" y="13.5" width="3" height="1" rx=".5" fill="white" opacity=".5"/>
+      </svg>
+    </div>
+    <span class="logo-name">Sala Afetos</span>
+  </a>
+  <div class="nav-links">
+    <button class="nav-link active" id="nl-home" onclick="showSection('home')">Início</button>
+    <button class="nav-link" id="nl-agenda" onclick="showSection('agenda')">Agenda</button>
+    <button class="nav-link" id="nl-admin" onclick="showSection('admin')">Admin</button>
+    <a class="nav-insta" href="https://www.instagram.com/sala.afetos/" target="_blank">
+      <div class="insta-icon"></div>@sala.afetos
+    </a>
+  </div>
+</nav>
+
+<!-- ══════════════ HOME ══════════════ -->
+<div class="section visible" id="sec-home">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-tag">
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" fill="#6b9a72"/></svg>
+      Coworking · Saúde Mental · Joinville
+    </div>
+    <h1>Um espaço pensado para <em>cuidar</em> de quem cuida</h1>
+    <p class="hero-sub">Salas acolhedoras para psicólogos, terapeutas e profissionais da saúde mental. Alugue por hora ou por período, sem burocracia.</p>
+    <button class="hero-cta" onclick="showSection('agenda')">
+      Ver horários disponíveis
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+
+  <!-- SALAS -->
+  <div class="salas-section">
+    <div class="section-label">Nossas salas</div>
+    <div class="section-title">Dois ambientes especializados</div>
+    <div class="salas-grid">
+
+      <!-- SALA ADULTOS -->
+      <div class="sala-card">
+        <div class="sala-img-placeholder sala-adultos-bg" style="position:relative;">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect x="8" y="14" width="32" height="22" rx="3" stroke="#6b9a72" stroke-width="1.5"/><path d="M16 36v4M32 36v4M12 40h24" stroke="#6b9a72" stroke-width="1.5" stroke-linecap="round"/><circle cx="24" cy="9" r="4" stroke="#6b9a72" stroke-width="1.5"/></svg>
+          <span class="placeholder-label">Foto da sala · em breve</span>
+          <div class="sala-badge badge-adultos" style="position:absolute;top:14px;left:14px;">Sala Adultos</div>
+        </div>
+        <div class="sala-body">
+          <div class="sala-name">Sala 1 — Adultos</div>
+          <div class="sala-desc">Ambiente acolhedor e reservado para atendimentos individuais com público adulto. Mobiliário confortável, iluminação regulável e isolamento acústico.</div>
+          <div class="sala-features">
+            <span class="feature-pill">Ar-condicionado</span>
+            <span class="feature-pill">Wi-Fi</span>
+            <span class="feature-pill">Isolamento acústico</span>
+            <span class="feature-pill">Poltrona + divã</span>
+          </div>
+          <div class="sala-precos">
+            <div class="preco-row">
+              <span class="preco-label">Por hora</span>
+              <span class="preco-val">R$ —  <span>/ hora</span></span>
+            </div>
+            <div class="preco-row">
+              <span class="preco-label">Período (4h)</span>
+              <span class="preco-val">R$ —  <span>/ bloco</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SALA CRIANÇAS -->
+      <div class="sala-card">
+        <div class="sala-img-placeholder sala-criancas-bg" style="position:relative;">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect x="6" y="18" width="18" height="16" rx="3" stroke="#8f7cbf" stroke-width="1.5"/><rect x="28" y="22" width="14" height="12" rx="3" stroke="#8f7cbf" stroke-width="1.5"/><circle cx="15" cy="11" r="4" stroke="#8f7cbf" stroke-width="1.5"/><circle cx="35" cy="14" r="3" stroke="#8f7cbf" stroke-width="1.5"/><path d="M10 34v6M20 34v6M30 34v6M38 34v6" stroke="#8f7cbf" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span class="placeholder-label">Foto da sala · em breve</span>
+          <div class="sala-badge badge-criancas" style="position:absolute;top:14px;left:14px;">Sala Crianças</div>
+        </div>
+        <div class="sala-body">
+          <div class="sala-name">Sala 2 — Crianças e Adolescentes</div>
+          <div class="sala-desc">Espaço lúdico e seguro para atendimentos infantojuvenis. Mobiliário adaptado, área de brinquedos terapêuticos e cores que favorecem o acolhimento.</div>
+          <div class="sala-features">
+            <span class="feature-pill">Ar-condicionado</span>
+            <span class="feature-pill">Wi-Fi</span>
+            <span class="feature-pill">Brinquedos terapêuticos</span>
+            <span class="feature-pill">Mobiliário infantil</span>
+          </div>
+          <div class="sala-precos">
+            <div class="preco-row">
+              <span class="preco-label">Por hora</span>
+              <span class="preco-val">R$ —  <span>/ hora</span></span>
+            </div>
+            <div class="preco-row">
+              <span class="preco-label">Período (4h)</span>
+              <span class="preco-val">R$ —  <span>/ bloco</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FUNCIONAMENTO -->
+  <div class="func-section">
+    <div class="func-inner">
+      <div class="section-label">Funcionamento</div>
+      <div class="section-title" style="margin-bottom:24px;">Como funciona</div>
+      <div class="func-grid">
+        <div class="func-card">
+          <div class="func-icon">📅</div>
+          <div class="func-card-title">Consulte a agenda</div>
+          <div class="func-card-desc">Veja os horários disponíveis em tempo real, sem precisar de cadastro ou login.</div>
+        </div>
+        <div class="func-card">
+          <div class="func-icon">💬</div>
+          <div class="func-card-title">Reserve pelo WhatsApp</div>
+          <div class="func-card-desc">Toque no horário desejado e o WhatsApp abre com a mensagem já preenchida.</div>
+        </div>
+        <div class="func-card">
+          <div class="func-icon">🗝️</div>
+          <div class="func-card-title">Confirme e utilize</div>
+          <div class="func-card-desc">Após confirmação, receba as instruções de acesso e utilize a sala no horário combinado.</div>
+        </div>
+      </div>
+
+      <div style="margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="func-card">
+          <div class="func-card-title" style="margin-bottom:6px;">⏰ Segunda a sexta</div>
+          <div class="func-card-desc">Das 08h às 22h</div>
+        </div>
+        <div class="func-card">
+          <div class="func-card-title" style="margin-bottom:6px;">⏰ Sábados</div>
+          <div class="func-card-desc">Das 08h às 12h</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA AGENDA -->
+  <div style="text-align:center;padding:60px 32px;">
+    <div class="section-label" style="margin-bottom:10px;">Pronto para reservar?</div>
+    <div style="font-family:'Playfair Display',serif;font-size:28px;color:var(--ink);margin-bottom:16px;">Veja os horários disponíveis</div>
+    <button class="hero-cta" onclick="showSection('agenda')">Abrir agenda →</button>
+  </div>
+
+</div><!-- /sec-home -->
+
+<!-- ══════════════ AGENDA ══════════════ -->
+<div class="section" id="sec-agenda">
+  <div class="agenda-section">
+    <div class="section-label">Disponibilidade</div>
+    <div class="section-title" style="margin-bottom:24px;">Agenda de horários</div>
+
+    <div class="sala-tabs">
+      <div class="sala-tab active" id="tab-a" onclick="setSala('a')">
+        <div class="sala-tab-dot dot-a"></div>Sala Adultos
+      </div>
+      <div class="sala-tab" id="tab-c" onclick="setSala('c')">
+        <div class="sala-tab-dot dot-c"></div>Sala Crianças e Adolescentes
+      </div>
+    </div>
+
+    <div class="agenda-main">
+      <div class="toolbar">
+        <div class="week-nav">
+          <div class="nav-btn" onclick="changeWeek(-1)">‹</div>
+          <div class="week-label" id="wk-label">—</div>
+          <div class="nav-btn" onclick="changeWeek(1)">›</div>
+        </div>
+        <div class="view-btns">
+          <button class="view-btn on-hora" id="vb-hora" onclick="setView('hora')">por hora</button>
+          <button class="view-btn" id="vb-per" onclick="setView('periodo')">período 4h</button>
+        </div>
+      </div>
+      <div class="legend" id="legend"></div>
+      <div class="grid-wrap">
+        <div class="sched" id="sched"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ ADMIN ══════════════ -->
+<div class="section" id="sec-admin">
+  <div class="admin-section">
+    <div class="section-label">Área restrita</div>
+    <div class="section-title" style="margin-bottom:24px;">Painel administrativo</div>
+
+    <!-- LOGIN -->
+    <div class="admin-login" id="admin-login">
+      <h2>Entrar</h2>
+      <p>Acesso exclusivo para gestores do espaço.</p>
+      <div class="field">
+        <label>Senha</label>
+        <input type="password" id="pwd-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <button class="btn-primary" onclick="doLogin()">Acessar painel</button>
+      <p class="err-msg" id="err-msg">Senha incorreta. Tente novamente.</p>
+    </div>
+
+    <!-- PANEL -->
+    <div class="admin-panel" id="admin-panel">
+      <div class="admin-header">
+        <h2>Gerenciar disponibilidade</h2>
+        <button class="btn-logout" onclick="doLogout()">Sair</button>
+      </div>
+
+      <div class="admin-tabs">
+        <button class="admin-tab active" id="at-a" onclick="setAdminSala('a')">Sala Adultos</button>
+        <button class="admin-tab" id="at-c" onclick="setAdminSala('c')">Sala Crianças / Adol.</button>
+      </div>
+
+      <div class="admin-grid-wrap">
+        <div class="admin-toolbar">
+          <div class="admin-week-nav">
+            <div class="nav-btn" onclick="changeAdminWeek(-1)">‹</div>
+            <div class="admin-week-label" id="awl">—</div>
+            <div class="nav-btn" onclick="changeAdminWeek(1)">›</div>
+          </div>
+          <div class="admin-hint">Clique para alternar livre / ocupado</div>
+        </div>
+        <div class="admin-sched-wrap">
+          <div class="admin-sched" id="admin-sched"></div>
+        </div>
+        <div class="save-bar">
+          <p>Alterações são salvas localmente no navegador.</p>
+          <div style="display:flex;gap:8px;">
+            <button class="btn-clear" onclick="clearAll()">Limpar semana</button>
+            <button class="btn-save" onclick="saveData()">Salvar alterações ✓</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>© 2025 Sala Afetos · Coworking para saúde mental ·
+    <a href="https://www.instagram.com/sala.afetos/" target="_blank">@sala.afetos</a>
+  </p>
+</footer>
+
+<!-- MODAL RESERVA -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <div id="m-badge" class="modal-badge"></div>
+    <div id="m-title" class="modal-title"></div>
+    <div id="m-sub" class="modal-sub"></div>
+    <div id="m-modelos">
+      <p style="font-size:12px;color:var(--ink-light);margin-bottom:10px;">Selecione o modelo de locação:</p>
+      <div class="modelo-grid">
+        <div class="modelo-card" id="mc-hora" onclick="selModelo('hora')">
+          <div class="modelo-title">Por hora</div>
+          <div class="modelo-desc">Reserve 1 ou mais horas avulsas conforme sua necessidade</div>
+        </div>
+        <div class="modelo-card" id="mc-per" onclick="selModelo('periodo')">
+          <div class="modelo-title">Período (4h)</div>
+          <div class="modelo-desc">Bloco de 4 horas seguidas — manhã, tarde ou noite</div>
+        </div>
+      </div>
+    </div>
+    <a id="wpp-btn" class="wpp-btn" href="#" target="_blank">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Abrir WhatsApp para reservar
+    </a>
+  </div>
+</div>
+
+<script>
+// ── CONSTANTES ──
+const WPP = '5547984673045';
+const ADMIN_PASS = 'afetos2025';
+const DAYS_PT  = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+const DAYS_FULL= ['','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+const MONTHS   = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+const HOURS_WD = [8,9,10,11,12,13,14,15,16,17,18,19,20,21];
+const HOURS_SAT= [8,9,10,11];
+const PERIODS  = [{l:'manhã',s:8},{l:'tarde',s:13},{l:'noite',s:18}];
+
+// ── ESTADO ──
+let curSala='a', curView='hora', weekOff=0;
+let adminSala='a', adminWeekOff=0;
+let selModelo_='hora', selSlot=null;
+
+// ocupados: { 'a': { 'weekkey_d_h': true } }
+function loadData(){
+  try{ return JSON.parse(localStorage.getItem('sala_afetos_occ')||'{}'); }
+  catch(e){ return {}; }
+}
+function saveData(){
+  localStorage.setItem('sala_afetos_occ', JSON.stringify(ocupados));
+  const b=document.getElementById('admin-sched').querySelectorAll('.a-busy').length;
+  alert(`✓ Salvo! ${b} horário(s) marcado(s) como ocupado.`);
+}
+let ocupados = loadData();
+
+// ── NAVEGAÇÃO ──
+function showSection(s){
+  ['home','agenda','admin'].forEach(n=>{
+    document.getElementById('sec-'+n).classList.toggle('visible',n===s);
+    const nl=document.getElementById('nl-'+n);
+    if(nl) nl.classList.toggle('active',n===s);
+  });
+  if(s==='agenda') renderAgenda();
+  if(s==='admin' && document.getElementById('admin-panel').style.display==='block') renderAdmin();
+}
+
+// ── HELPERS DATA ──
+function getMonday(off){
+  const d=new Date(), day=d.getDay();
+  const diff=d.getDate()-day+(day===0?-6:1);
+  d.setDate(diff+off*7); d.setHours(0,0,0,0); return d;
+}
+function fmt(d){ return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}`; }
+function weekKey(off){ const m=getMonday(off); return `${m.getFullYear()}_${m.getMonth()}_${m.getDate()}`; }
+function isOcc(sala,off,di,h){
+  const k=`${weekKey(off)}_${di}_${h}`;
+  return !!(ocupados[sala]&&ocupados[sala][k]);
+}
+function setOcc(sala,off,di,h,val){
+  if(!ocupados[sala]) ocupados[sala]={};
+  const k=`${weekKey(off)}_${di}_${h}`;
+  if(val) ocupados[sala][k]=true;
+  else delete ocupados[sala][k];
+}
+function periodBusy(sala,off,di,sh){
+  for(let h=sh;h<sh+4;h++) if(isOcc(sala,off,di,h)) return true;
+  return false;
+}
+
+// ── SALA TABS (agenda) ──
+function setSala(s){
+  curSala=s;
+  document.getElementById('tab-a').classList.toggle('active',s==='a');
+  document.getElementById('tab-c').classList.toggle('active',s==='c');
+  renderAgenda();
+}
+function setView(v){
+  curView=v;
+  document.getElementById('vb-hora').className='view-btn'+(v==='hora'?' on-hora':'');
+  document.getElementById('vb-per').className='view-btn'+(v==='periodo'?' on-periodo':'');
+  updateLegend();
+  renderAgenda();
+}
+function changeWeek(d){ weekOff+=d; renderAgenda(); }
+
+function updateLegend(){
+  const el=document.getElementById('legend');
+  el.innerHTML= curView==='hora'
+    ? `<div class="legend-item"><div class="legend-box" style="background:var(--sage-light);border:1px solid var(--sage-mid);"></div>Disponível (hora)</div>
+       <div class="legend-item"><div class="legend-box" style="background:var(--warm);border:1px solid var(--warm-dark);"></div>Ocupado</div>
+       <div class="legend-item"><div class="legend-box" style="background:#f0ece4;border:1px solid var(--warm-dark);"></div>Fechado</div>`
+    : `<div class="legend-item"><div class="legend-box" style="background:var(--gold-light);border:1px solid var(--gold-mid);"></div>Disponível (4h)</div>
+       <div class="legend-item"><div class="legend-box" style="background:var(--warm);border:1px solid var(--warm-dark);"></div>Ocupado</div>
+       <div class="legend-item"><div class="legend-box" style="background:#f0ece4;border:1px solid var(--warm-dark);"></div>Fechado</div>`;
+}
+
+// ── RENDER AGENDA ──
+function renderAgenda(){
+  updateLegend();
+  const monday=getMonday(weekOff);
+  const days=Array.from({length:6},(_,i)=>{const d=new Date(monday);d.setDate(monday.getDate()+i);return d;});
+  const sat=days[5];
+  document.getElementById('wk-label').textContent=`${fmt(days[0])} – ${fmt(sat)} ${MONTHS[sat.getMonth()]}`;
+  const today=new Date(); today.setHours(0,0,0,0);
+  const grid=document.getElementById('sched');
+  grid.innerHTML='';
+
+  // headers
+  const emp=document.createElement('div');emp.className='col-hdr';grid.appendChild(emp);
+  days.forEach((d,i)=>{
+    const h=document.createElement('div');
+    const isSat=i===5,isToday=d.getTime()===today.getTime();
+    h.className='col-hdr'+(isSat?' sat':'')+(isToday?' today':'');
+    h.innerHTML=`<span>${DAYS_PT[d.getDay()]}</span><span class="dn">${d.getDate()}</span>`;
+    grid.appendChild(h);
+  });
+
+  if(curView==='hora') renderHoraGrid(grid,days);
+  else renderPeriodGrid(grid,days);
+}
+
+function renderHoraGrid(grid,days){
+  HOURS_WD.forEach(h=>{
+    const tl=document.createElement('div');tl.className='tcol';tl.textContent=`${h}h`;grid.appendChild(tl);
+    days.forEach((d,di)=>{
+      const isSat=di===5;
+      const cell=document.createElement('div');cell.className='slot';
+      if(isSat&&h>=12){cell.classList.add('s-closed');}
+      else if(isOcc(curSala,weekOff,di+1,h)){cell.classList.add('s-busy');cell.textContent='ocupado';}
+      else{
+        cell.classList.add('s-free');cell.textContent='livre';
+        cell.onclick=()=>openModal(d,di+1,h,1);
+      }
+      grid.appendChild(cell);
+    });
+  });
+}
+
+function renderPeriodGrid(grid,days){
+  PERIODS.forEach(p=>{
+    for(let i=0;i<4;i++){
+      const h=p.s+i;
+      const tl=document.createElement('div');tl.className='tcol';tl.textContent=i===0?`${h}h`:'';grid.appendChild(tl);
+      days.forEach((d,di)=>{
+        const isSat=di===5;
+        const cell=document.createElement('div');cell.className='slot';
+        const satClosed=isSat&&p.s>=13;
+        const wdClosed=isSat&&h>=12;
+        if(satClosed||wdClosed){cell.classList.add('s-closed');}
+        else if(periodBusy(curSala,weekOff,di+1,p.s)){
+          cell.classList.add('s-busy');
+          if(i===1)cell.textContent='ocupado';
+        } else {
+          cell.classList.add('s-free-p');
+          if(i===0){cell.classList.add('pt');cell.textContent=p.l;cell.onclick=()=>openModal(d,di+1,p.s,4,p.l);}
+          else if(i===3)cell.classList.add('pb');
+          else cell.classList.add('pm');
+          if(i>0)cell.onclick=()=>openModal(d,di+1,p.s,4,p.l);
+        }
+        grid.appendChild(cell);
+      });
+    }
+  });
+}
+
+// ── MODAL ──
+function openModal(date,di,h,dur,pLabel){
+  selSlot={date,di,h,dur,pLabel};
+  selModelo_=dur===4?'periodo':'hora';
+  const sn=curSala==='a'?'Sala Adultos':'Sala Crianças e Adolescentes';
+  const sc=curSala==='a'?'background:var(--sage-light);color:var(--sage-dark);':'background:var(--lav-light);color:var(--lav-dark);';
+  document.getElementById('m-badge').style.cssText=sc;
+  document.getElementById('m-badge').textContent=sn;
+  document.getElementById('m-title').textContent=`${DAYS_FULL[di]}, ${fmt(date)}`;
+  document.getElementById('m-sub').textContent=dur===1?`${h}h – ${h+1}h`:`${h}h – ${h+dur}h`;
+  const ms=document.getElementById('m-modelos');
+  if(dur===4){ms.style.display='none';selModelo_='periodo';}
+  else{ms.style.display='block';selModelo('hora');}
+  updWpp();
+  document.getElementById('overlay').classList.add('open');
+}
+function selModelo(m){
+  selModelo_=m;
+  document.getElementById('mc-hora').className='modelo-card'+(m==='hora'?' sel-hora':'');
+  document.getElementById('mc-per').className='modelo-card'+(m==='periodo'?' sel-per':'');
+  updWpp();
+}
+function updWpp(){
+  if(!selSlot)return;
+  const sn=curSala==='a'?'Sala Adultos':'Sala Crianças e Adolescentes';
+  const ds=`${DAYS_FULL[selSlot.di]}, ${fmt(selSlot.date)}`;
+  const dur=selModelo_==='periodo'?4:1;
+  const ts=`${selSlot.h}h às ${selSlot.h+dur}h`;
+  const ml=selModelo_==='periodo'?'período de 4 horas':'locação por hora';
+  const msg=encodeURIComponent(`Olá! Vi na agenda que a *${sn}* está disponível na *${ds}*, das *${ts}*.\n\nGostaria de reservar pelo modelo de *${ml}*. Poderia confirmar?`);
+  document.getElementById('wpp-btn').href=`https://wa.me/${WPP}?text=${msg}`;
+}
+function closeModal(){document.getElementById('overlay').classList.remove('open');}
+document.getElementById('overlay').addEventListener('click',function(e){if(e.target===this)closeModal();});
+
+// ── ADMIN LOGIN ──
+function doLogin(){
+  const v=document.getElementById('pwd-input').value;
+  const err=document.getElementById('err-msg');
+  if(v===ADMIN_PASS){
+    document.getElementById('admin-login').style.display='none';
+    document.getElementById('admin-panel').style.display='block';
+    renderAdmin();
+  } else {
+    err.style.display='block';
+    setTimeout(()=>err.style.display='none',3000);
+  }
+}
+function doLogout(){
+  document.getElementById('admin-panel').style.display='none';
+  document.getElementById('admin-login').style.display='block';
+  document.getElementById('pwd-input').value='';
+}
+
+// ── ADMIN SALA / WEEK ──
+function setAdminSala(s){
+  adminSala=s;
+  document.getElementById('at-a').classList.toggle('active',s==='a');
+  document.getElementById('at-c').classList.toggle('active',s==='c');
+  renderAdmin();
+}
+function changeAdminWeek(d){ adminWeekOff+=d; renderAdmin(); }
+
+// ── RENDER ADMIN ──
+function renderAdmin(){
+  const monday=getMonday(adminWeekOff);
+  const days=Array.from({length:6},(_,i)=>{const d=new Date(monday);d.setDate(monday.getDate()+i);return d;});
+  const sat=days[5];
+  document.getElementById('awl').textContent=`${fmt(days[0])} – ${fmt(sat)} ${MONTHS[sat.getMonth()]}`;
+  const grid=document.getElementById('admin-sched');
+  grid.innerHTML='';
+
+  // headers
+  const emp=document.createElement('div');emp.style.cssText='border-bottom:1px solid var(--warm-dark);';grid.appendChild(emp);
+  days.forEach((d,i)=>{
+    const h=document.createElement('div');
+    h.className='col-hdr'+(i===5?' sat':'');
+    h.innerHTML=`<span>${DAYS_PT[d.getDay()]}</span><span class="dn">${d.getDate()}</span>`;
+    grid.appendChild(h);
+  });
+
+  HOURS_WD.forEach(h=>{
+    const tl=document.createElement('div');tl.className='tcol';tl.textContent=`${h}h`;grid.appendChild(tl);
+    days.forEach((d,di)=>{
+      const isSat=di===5;
+      const cell=document.createElement('div');cell.className='a-slot';
+      if(isSat&&h>=12){
+        cell.classList.add('a-closed');
+      } else {
+        const occ=isOcc(adminSala,adminWeekOff,di+1,h);
+        cell.classList.add(occ?'a-busy':'a-free');
+        cell.textContent=occ?'ocupado':'livre';
+        cell.onclick=()=>{
+          const cur=isOcc(adminSala,adminWeekOff,di+1,h);
+          setOcc(adminSala,adminWeekOff,di+1,h,!cur);
+          renderAdmin();
+        };
+      }
+      grid.appendChild(cell);
+    });
+  });
+}
+
+function clearAll(){
+  if(!confirm('Limpar todos os horários desta semana?'))return;
+  const wk=weekKey(adminWeekOff);
+  if(ocupados[adminSala]){
+    Object.keys(ocupados[adminSala]).forEach(k=>{
+      if(k.startsWith(wk)) delete ocupados[adminSala][k];
+    });
+  }
+  renderAdmin();
+}
+
+// ── INIT ──
+renderAgenda();
+</script>
+</body>
+</html>
